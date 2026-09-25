@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+.container {
+    width: 100%;
+    max-width: 1250px;
+    margin-inline: auto;
+}
+
+button {
+    cursor: pointer;
+}
+
+.mainPick {
+    background-image: url('./assets/Rectangle 30.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+#overlay.active {
+    display: flex;
+}
+
+#reservationModal {
+    animation: reser 0.3s ease-out;
+}
+
+@keyframes reser {
+    0% {transform: translateY(20px); opacity: 0;}
+    100% {transform: translate(0); opacity: 1;}
+}
+
+#menuPage.active {
+    display: flex !important;
+}

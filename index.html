@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./output.css">
+    <title>Food</title>
+</head>
+<body>
+    <section class="w-full h-screen flex max-sm:flex-col">
+        <aside class="w-[100px] max-sm:w-full h-full max-sm:h-20 bg-[#333] py-[30px] max-sm:px-[5%] flex flex-col max-sm:flex-row items-center justify-between">
+            <div class="flex flex-col items-center gap-5 max-sm:flex-row">
+                <a href="#"><img class="max-sm:w-[60px]" src="./assets/logo.png" alt="Logo"></a>
+                <button id="menuBtn"><img src="./assets/gg_menu-left.png" alt="Menu"></button>
+            </div>
+            <div class="flex flex-col gap-7 items-center max-sm:flex-row max-sm:gap-5">
+                <a class="max-sm:w-7" href="#"><img src="./assets/youtube.svg" alt="YouTube"></a>
+                <a class="max-sm:w-7" href="#"><img src="./assets/wk.svg" alt="WK"></a>
+                <a class="max-sm:w-7" href="#"><img src="./assets/tg.svg" alt="Telegram"></a>
+            </div>
+        </aside>
+        <div class="w-full h-full mainPick">
+            <div class="container max-xl:px-[5%]">
+
+                <nav class="w-full flex justify-end items-center gap-[50px] pt-[30px] max-sm:hidden">
+                    <a href="#" class="text-white">Menu</a>
+                    <a href="#" class="text-white">Delivery</a>
+                    <a href="#" class="text-white">Payment</a>
+                    <button id="reservationBtn" class="py-[10px] px-5 text-white bg-[#B59571]">Table reservation</button>
+                </nav>
+                <div class="w-full h-[80vh] flex items-center justify-center">
+                    <h1 class="text-[#fff] text-[60px] font-semibold text-center max-w-[60%] max-lg:text-[50px] max-md:text-[40px] max-lg:max-w-[80%] max-sm:max-w-[90%] max-md:leading-[130%]">Scenic restaurant Food Exxe Relo on Krestovsky Island</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Reservation Form -->
+    <div id="overlay" class="hidden absolute z-50 inset-0 bg-[#0008] duration-200 items-center justify-center">
+        <div id="reservationModal" class="bg-[#333] flex flex-col items-center pb-[60px]">
+            <div class="w-full flex justify-end p-5">
+                <button id="reservationCloseBtn"><img src="./assets/closebtn.svg" alt="X"></button>
+            </div>
+            <img src="./assets/logo.png" alt="">
+            <p class="text-[20px] font-bold text-white mt-[10px]">Book a table</p>
+            <form class="flex flex-col gap-[20px] items-center px-[50px] py-8 w-[360px]">
+                <input class="outline-hidden border border-[#fff4] w-full h-[48px] pl-5 text-white placeholder:text-white" type="text" placeholder="Name">
+                <input class="outline-hidden border border-[#fff4] w-full h-[48px] pl-5 text-white placeholder:text-white" type="number" placeholder="Phone">
+                <div class="flex gap-5 w-full">
+                    <input class="outline-hidden border border-[#fff4] h-[48px] pl-5 text-white placeholder:text-white w-1/2" type="text" placeholder="Guests">
+                    <input class="outline-hidden border border-[#fff4] h-[48px] pl-5 text-white placeholder:text-white w-1/2" type="number" placeholder="Date">
+                </div>
+            </form>
+            <button class="bg-[#B59571] py-[10px] px-5 text-white font-bold">Book now</button>
+        </div>
+    </div>
+
+    <!-- Modal Menu -->
+     <div id="menuPage" class="hidden absolute inset-0 z-40 duration-500 bg-[#333] flex items-center justify-between flex-col py-20">
+        <div class="flex flex-col items-center gap-7">
+            <img src="./assets/logo.png" alt="Logo">
+            <button id="closeMenu"><img src="./assets/closebtn.svg" alt="X"></button>
+        </div>
+        <nav class="h-1/2 max-sm:h-1/3 max-sm:text-[30px] flex flex-col items-center pb-10 justify-between text-[48px] font-bold">
+             <a href="#" class="text-white">Menu</a>
+             <a href="#" class="text-white">Delivery</a>
+             <a href="#" class="text-white">Payment</a>
+        </nav>
+        <button id="reservationBtnMenu" class="py-[10px] px-5 text-white bg-[#B59571]">Table reservation</button>
+        <div class="flex gap-10">
+            <a href="#"><img src="./assets/youtube.svg" alt="YouTube"></a>
+            <a href="#"><img src="./assets/wk.svg" alt="WK"></a>
+            <a href="#"><img src="./assets/tg.svg" alt="Telegram"></a>
+        </div>
+     </div>
+
+    <script src="./utils/global.js"></script>
+</body>
+</html>
