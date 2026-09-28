@@ -1,0 +1,23 @@
+{
+  "en": {
+    "menu": "Menu",
+    "delivery": "Delivery",
+    "payment": "Payment",
+    "reservation": "Table reservation",
+    "heroTitle": "Scenic restaurant Food Exxe Relo on Krestovsky Island"
+  },
+  "ru": {
+    "menu": "Меню",
+    "delivery": "Доставка",
+    "payment": "Оплата",
+    "reservation": "Забронировать стол",
+    "heroTitle": "Видовой ресторан Food Exxe Relo на Крестовском острове"
+  },
+  "uz": {
+    "menu": "Menu",
+    "delivery": "Etkazib berish",
+    "payment": "To'lov",
+    "reservation": "Stol band qilish",
+    "heroTitle": "Krestovskiy orolidagi manzarali Food Exxe Relo restorani"
+  }
+}

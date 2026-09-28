@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+html {
+    scroll-behavior: smooth;
+}
+
 .container {
     width: 100%;
     max-width: 1250px;
@@ -28,6 +32,10 @@ button {
     border-radius: 10px;
 }
 
+.sc {
+    overflow-y: hidden;
+}
+
 .mainPick {
     background-image: url('./assets/Rectangle 30.jpg');
     background-size: cover;
@@ -49,4 +57,9 @@ button {
 
 #menuPage.active {
     display: flex !important;
+}
+
+.loc {
+    background-image: url("./assets/location.jpg");
+    background-size: cover;
 }
