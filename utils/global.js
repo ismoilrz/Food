@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const body = document.body;
 
-    // --- DOM Elements ---
     const menuBtn = document.getElementById('menuBtn');
     const menuPage = document.getElementById('menuPage');
     const closeMenu = document.getElementById('closeMenu');
@@ -25,7 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const menuButtons = document.getElementById('menuButtons');
     const menuCon = document.getElementById('menuCon');
 
-    // --- Data ---
     const flagMap = {
         en: 'fi-gb',
         ru: 'fi-ru',
@@ -33,13 +31,13 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const MenuBtns = [
-        { id: 1, label: 'Breakfast' },
-        { id: 2, label: 'Raw' },
-        { id: 3, label: 'Bruschetts' },
-        { id: 4, label: 'Salads' },
-        { id: 5, label: 'Meat' },
-        { id: 6, label: 'Fish' }
-    ];
+    { id: 1, key: 'Breakfast', labelKey: 'menuBtnBreakfast' },
+    { id: 2, key: 'Raw', labelKey: 'menuBtnRaw' },
+    { id: 3, key: 'Bruschetts', labelKey: 'menuBtnBruschetts' },
+    { id: 4, key: 'Salads', labelKey: 'menuBtnSalads' },
+    { id: 5, key: 'Meat', labelKey: 'menuBtnMeat' },
+    { id: 6, key: 'Fish', labelKey: 'menuBtnFish' }
+];
 
     const MenuData = [
         { id: 1, url: "./assets/menufood1.png", title: "Fried eggs from three eggs", price: "250₽", type: "Breakfast" },
@@ -90,46 +88,234 @@ document.addEventListener('DOMContentLoaded', () => {
         overlay?.classList.add('hidden');
     };
 
-    function renderMenuItems(category) {
-        if (!menuCon) return;
-        const filteredData = MenuData.filter(item => item.type === category);
+    function getTranslatedTitle(item) {
+    return translations[currentLang]?.menuData?.[item.id]?.title || item.title;
+}
 
-        if (filteredData.length === 0) {
-            menuCon.innerHTML = `<p class="text-gray-500 py-10">Ushbu kategoriyada taomlar topilmadi.</p>`;
+    function renderMenuItems(category) {
+    if (!menuCon) return;
+    const filterData = MenuData.filter(item => item.type === category);
+
+    if (filterData.length === 0) {
+        const notFoundText = translations[currentLang]?.notFound || "Ushbu kategoriyada taomlar topilmadi.";
+        menuCon.innerHTML = `<p class="text-gray-500 py-10">${notFoundText}</p>`;
+        return;
+    }
+
+    const btnText = translations[currentLang]?.addToCart || "Add to cart";
+
+    menuCon.innerHTML = filterData.map(item => {
+        const itemTitle = getTranslatedTitle(item);
+        
+        return `
+            <div data-id="${item.id}" class="menu-card cursor-pointer w-[300px] max-sm:w-full border border-[#3333337c] flex flex-col items-center justify-between">
+                <img class="w-full h-[220px] object-cover" src="${item.url}" alt="${itemTitle}" />
+                <h5 class="py-[20px] text-[18px] font-bold text-[#333] text-center max-w-[90%]">${itemTitle}</h5>
+                <div class="w-[90%] flex justify-between items-center mb-[15px]">
+                    <strong class="text-[24px] font-bold text-[#333]">${item.price}</strong>
+                    <button class="add-to-cart-btn py-[8px] px-4 bg-[#B59571] font-bold text-[#fff] text-sm hover:opacity-90 transition-opacity">${btnText}</button>
+                </div>
+            </div>
+        `;
+    }).join("");
+}
+
+
+function renderProductDetail(productId) {
+    if (!menuCon) return;
+    const product = MenuData.find(item => item.id === Number(productId));
+
+    if (!product) return;
+
+    const lang = translations[currentLang] || {};
+    const productTitle = lang.menuData?.[product.id]?.title || product.title;
+    const btnText = lang.addToCart || "Add to card";
+    const portionText = lang.portion || "gramm";
+    const portionsCountText = lang.portionsCount || "Number of portions:";
+    const makeItTastierText = lang.makeItTastier || "Make it even tastier";
+    const tigerPrawnsText = lang.tigerPrawns || "Tiger prawns 60 g";
+
+    menuCon.innerHTML = `
+    <div class="w-full flex justify-center gap-[134px] max-lg:flex-col max-lg:items-center">
+        <!-- Rasm slayder qismi -->
+        <div class="product-slider-wrapper">
+            <div style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff" class="swiper mySwiper2">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <img src="${product.url}" alt="${productTitle}" />
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="${product.url}" alt="${productTitle}" />
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="${product.url}" alt="${productTitle}" />
+                    </div>
+                </div>
+            </div>
+
+            <div thumbsSlider="" class="swiper mySwiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <img src="${product.url}" alt="${productTitle}" />
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="${product.url}" alt="${productTitle}" />
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="${product.url}" alt="${productTitle}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mahsulot ma'lumotlari va qo'shimchalar qismi -->
+        <div class="w-[310px] max-sm:px-[5%] max-sm:mt-[-30px]">
+            <h3 class="text-[32px] font-bold text-[#333]">${productTitle}</h3>
+            <hr class="text-[#33333375] my-[35px]" />
+            
+            <div>
+                <b class="text-[32px] font-bold text-[#333]">${product.price}</b>
+                <span class="font-bold text-[#33333375]">/ 400 ${portionText}</span>
+            </div>
+            
+            <p class="font-bold text-[#333] mt-6 mb-[30px]">${portionsCountText}</p>
+            <div class="flex gap-5">
+                <input class="w-[84px] h-[58px] border-2 pl-6 text-[22px] outline-hidden text-[#000] border-[#33333375]" type="number" value="1" min="1">
+                <button class="px-[30px] py-[10px] text-[16px] max-sm:text-[14px] text-[#fff] font-bold bg-[#B59571] hover:opacity-90 transition-opacity">${btnText}</button>
+            </div>
+            
+            <hr class="mt-11 mb-3 text-[#33333375]" />
+            
+            <!-- Qo'shimchalar (Toppings) qismi -->
+            <div>
+                <b class="text-[32px] font-bold text-[#333]">${makeItTastierText}</b>
+                
+                <div class="flex justify-between items-center mt-5">
+                    <div class="flex flex-col gap-[5px]">
+                        <p class="text-[#33333375] font-bold">${tigerPrawnsText}</p>
+                        <b class="text-[20px] font-bold">450 ₽</b>
+                    </div>
+                    <div class="checkbox-wrapper-33">
+                        <label class="checkbox">
+                            <input class="checkbox__trigger visuallyhidden" type="checkbox" />
+                            <span class="checkbox__symbol">
+                                <svg aria-hidden="true" class="icon-checkbox" width="28px" height="28px" viewBox="0 0 28 28" version="1" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M4 14l8 7L24 7"></path>
+                                </svg>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center mt-5">
+                    <div class="flex flex-col gap-[5px]">
+                        <p class="text-[#33333375] font-bold">${tigerPrawnsText}</p>
+                        <b class="text-[20px] font-bold">450 ₽</b>
+                    </div>
+                    <div class="checkbox-wrapper-33">
+                        <label class="checkbox">
+                            <input class="checkbox__trigger visuallyhidden" type="checkbox" />
+                            <span class="checkbox__symbol">
+                                <svg aria-hidden="true" class="icon-checkbox" width="28px" height="28px" viewBox="0 0 28 28" version="1" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M4 14l8 7L24 7"></path>
+                                </svg>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center mt-5">
+                    <div class="flex flex-col gap-[5px]">
+                        <p class="text-[#33333375] font-bold">${tigerPrawnsText}</p>
+                        <b class="text-[20px] font-bold">450 ₽</b>
+                    </div>
+                    <div class="checkbox-wrapper-33">
+                        <label class="checkbox">
+                            <input class="checkbox__trigger visuallyhidden" type="checkbox" />
+                            <span class="checkbox__symbol">
+                                <svg aria-hidden="true" class="icon-checkbox" width="28px" height="28px" viewBox="0 0 28 28" version="1" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M4 14l8 7L24 7"></path>
+                                </svg>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center mt-5">
+                    <div class="flex flex-col gap-[5px]">
+                        <p class="text-[#33333375] font-bold">${tigerPrawnsText}</p>
+                        <b class="text-[20px] font-bold">450 ₽</b>
+                    </div>
+                    <div class="checkbox-wrapper-33">
+                        <label class="checkbox">
+                            <input class="checkbox__trigger visuallyhidden" type="checkbox" />
+                            <span class="checkbox__symbol">
+                                <svg aria-hidden="true" class="icon-checkbox" width="28px" height="28px" viewBox="0 0 28 28" version="1" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M4 14l8 7L24 7"></path>
+                                </svg>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    `;
+
+    // Swiper slayderlarini ishga tushiramiz
+    const swiperThumb = new Swiper('.mySwiper', {
+        spaceBetween: 12,        
+        slidesPerView: 3,       
+        freeMode: true,
+        watchSlidesProgress: true,
+    });
+
+    new Swiper('.mySwiper2', {
+        spaceBetween: 10,
+        thumbs: {
+            swiper: swiperThumb,
+        },
+    });
+}
+
+    menuCon?.addEventListener('click', (e) => {
+        if (e.target.classList.contains('add-to-cart-btn')) {
+            e.stopPropagation();
             return;
         }
 
-        menuCon.innerHTML = filteredData.map(item => `
-            <div class="w-[300px] max-sm:w-full border border-[#3333337c] flex flex-col items-center justify-between">
-                <img class="w-full h-[220px] object-cover" src="${item.url}" alt="${item.title}" />
-                <h5 class="py-[20px] text-[18px] font-bold text-[#333] text-center max-w-[90%]">${item.title}</h5>
-                <div class="w-[90%] flex justify-between items-center mb-[15px]">
-                    <strong class="text-[24px] font-bold text-[#333]">${item.price}</strong>
-                    <button class="py-[8px] px-4 bg-[#B59571] font-bold text-[#fff] text-sm hover:opacity-90 transition-opacity">Add to cart</button>
-                </div>
-            </div>
-        `).join("");
-    }
+        if (e.target.id === 'backToMenuBtn') return;
 
-    function renderMenuButtons() {
-        if (!menuButtons) return;
+        const card = e.target.closest('.menu-card');
+        if (card) {
+            const productId = card.getAttribute('data-id');
+            renderProductDetail(productId);
+        }
+    });
 
-        menuButtons.innerHTML = MenuBtns.map(item => {
-            const isActive = item.label === activeCategory;
-            return `
-                <button 
-                    data-category="${item.label}" 
-                    class="menu-btn transition-colors duration-200 font-medium hover:text-[#b59571] pb-1 ${
-                        isActive ? 'border-b-2 border-[#B59571] text-[#B59571]' : 'text-[#333]'
-                    }"
-                >
-                    ${item.label}
-                </button>
-            `;
-        }).join("");
+   function renderMenuButtons() {
+    if (!menuButtons) return;
 
-        renderMenuItems(activeCategory);
-    }
+    menuButtons.innerHTML = MenuBtns.map(item => {
+        const isActive = item.key === activeCategory;
+        const labelText = translations[currentLang]?.[item.labelKey] || item.key;
+
+        return `
+            <button 
+                data-category="${item.key}" 
+                data-i18n="${item.labelKey}"
+                class="menu-btn transition-colors duration-200 font-medium hover:text-[#b59571] pb-1 ${
+                    isActive ? 'border-b-2 border-[#B59571] text-[#B59571]' : 'text-[#333]'
+                }"
+            >
+                ${labelText}
+            </button>
+        `;
+    }).join("");
+
+    renderMenuItems(activeCategory);
+}
 
     async function loadTranslations() {
         try {
@@ -142,31 +328,40 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function changeLanguage(lang) {
-        currentLang = lang;
-        localStorage.setItem('appLang', lang);
+   function changeLanguage(lang) {
+    currentLang = lang;
+    localStorage.setItem('appLang', lang);
 
-        if (currentLangSpan && currentFlagSpan) {
-            currentLangSpan.textContent = lang.toUpperCase();
-            currentFlagSpan.className = `fi ${flagMap[lang]} text-base rounded-[2px]`;
-        }
-
-        if (mobileCurrentLang && mobileCurrentFlag) {
-            mobileCurrentLang.textContent = lang.toUpperCase();
-            mobileCurrentFlag.className = `fi ${flagMap[lang]} text-base rounded-[2px]`;
-        }
-
-        if (translations[lang]) {
-            document.querySelectorAll('[data-i18n]').forEach(element => {
-                const key = element.getAttribute('data-i18n');
-                if (translations[lang][key]) {
-                    element.textContent = translations[lang][key];
-                }
-            });
-        }
+    if (currentLangSpan && currentFlagSpan) {
+        currentLangSpan.textContent = lang.toUpperCase();
+        currentFlagSpan.className = `fi ${flagMap[lang]} text-base rounded-[2px]`;
     }
 
+    if (mobileCurrentLang && mobileCurrentFlag) {
+        mobileCurrentLang.textContent = lang.toUpperCase();
+        mobileCurrentFlag.className = `fi ${flagMap[lang]} text-base rounded-[2px]`;
+    }
 
+    if (translations[lang]) {
+        // Matnlarni (textContent) tarjima qilish
+        document.querySelectorAll('[data-i18n]').forEach(element => {
+            const key = element.getAttribute('data-i18n');
+            if (translations[lang][key]) {
+                element.textContent = translations[lang][key];
+            }
+        });
+
+        // Input placeholder'larini tarjima qilish
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+            const key = element.getAttribute('data-i18n-placeholder');
+            if (translations[lang][key]) {
+                element.placeholder = translations[lang][key];
+            }
+        });
+    }
+
+    renderMenuButtons();
+}
     menuBtn?.addEventListener('click', () => {
         body.classList.add('overflow-hidden');
         menuPage?.classList.remove('hidden');

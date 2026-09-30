@@ -117,8 +117,8 @@
             <div>
             <p data-i18n="deliveryDes" class="text-[18px] max-lg:text-center text-[#333]">Phasellus diam, ultrices lobortis integer et. Diam, purus vel sagittis, non, a. In risus, venenatis enim vitae mauris aliquet orci. Consectetur nibh interdum nullam ut lobortis eu etiam sem. Et in vitae pellentesque non, lectus orci natoque faucibus suspendisse. Semper aliquam id et ultrices velit donec lacus. In odio sit nibh volutpat cras placerat sit feugiat dignissim. Rutrum et suspendisse tortor, lobortis eleifend in fringilla. Egestas cursus imperdiet cursus dui, nulla id massa. Hendrerit nam enim semper porttitor imperdiet diam semper. Nulla sit etiam cras morbi enim elementum euismod sapien.</p>
             <div class="flex gap-[30px] max-sm:gap-4 mt-[60px] max-lg:justify-center max-sm:flex-col">
-                <button data-i18n="deliveryBtnLearn" class="py-[10px] px-[30px] text-[20px] text-white font-semibold border border-transparent duration-200 bg-[#B59571] hover:bg-transparent hover:border-[#333] hover:text-black">Learn more</button>
-                <button data-i18n="deliveryBtnTerms" class="py-[10px] px-[30px] text-[20px] text-white font-semibold border border-transparent duration-200 bg-[#B59571] hover:bg-transparent hover:border-[#333] hover:text-black">Delivery terms</button>
+                <a href="#" data-i18n="deliveryBtnLearn" class="py-[10px] px-[30px] text-[20px] text-white font-semibold border border-transparent duration-200 bg-[#B59571] hover:bg-transparent hover:border-[#333] hover:text-black">Learn more</a>
+                <a href="#" data-i18n="deliveryBtnTerms" class="py-[10px] px-[30px] text-[20px] text-white font-semibold border border-transparent duration-200 bg-[#B59571] hover:bg-transparent hover:border-[#333] hover:text-black">Delivery terms</a>
             </div>
             </div>
         </div>
@@ -191,23 +191,23 @@
 
     <!-- Reservation Form -->
     <div id="overlay" class="hidden fixed top-0 left-0 z-50 inset-0 bg-[#0008] duration-200 items-center justify-center">
-        <div id="reservationModal" class="bg-[#333] flex flex-col items-center pb-[60px]">
-            <div class="w-full flex justify-end p-5">
-                <button id="reservationCloseBtn"><img src="./assets/closebtn.svg" alt="X"></button>
-            </div>
-            <img src="./assets/logo.png" alt="">
-            <p class="text-[20px] font-bold text-white mt-[10px]">Book a table</p>
-            <form class="flex flex-col gap-[20px] items-center px-[50px] py-8 w-[360px]">
-                <input class="outline-hidden border border-[#fff4] w-full h-[48px] pl-5 text-white placeholder:text-white" type="text" placeholder="Name">
-                <input class="outline-hidden border border-[#fff4] w-full h-[48px] pl-5 text-white placeholder:text-white" type="number" placeholder="Phone">
-                <div class="flex gap-5 w-full">
-                    <input class="outline-hidden border border-[#fff4] h-[48px] pl-5 text-white placeholder:text-white w-1/2" type="text" placeholder="Guests">
-                    <input class="outline-hidden border border-[#fff4] h-[48px] pl-5 text-white placeholder:text-white w-1/2" type="number" placeholder="Date">
-                </div>
-            </form>
-            <button class="bg-[#B59571] py-[10px] px-5 text-white font-bold">Book now</button>
+    <div id="reservationModal" class="bg-[#333] flex flex-col items-center pb-[60px] max-sm:w-[90%]">
+        <div class="w-full flex justify-end p-5">
+            <button id="reservationCloseBtn"><img src="./assets/closebtn.svg" alt="X"></button>
         </div>
+        <img src="./assets/logo.png" alt="">
+        <p data-i18n="bookTable" class="text-[20px] font-bold text-white mt-[10px]">Book a table</p>
+        <form class="flex flex-col gap-[20px] items-center px-[50px] py-8 w-[360px] max-sm:w-full max-sm:px-[3%]">
+            <input data-i18n-placeholder="inputName" class="outline-hidden border border-[#fff4] w-full max-sm:w-[90%] h-[48px] pl-5 text-white placeholder:text-white" type="text" placeholder="Name">
+            <input data-i18n-placeholder="inputPhone" class="outline-hidden border border-[#fff4] w-full max-sm:w-[90%] h-[48px] pl-5 text-white placeholder:text-white" type="tel" placeholder="Phone">
+            <div class="flex gap-5 w-full max-sm:flex-col max-sm:items-center">
+                <input data-i18n-placeholder="inputGuests" class="outline-hidden border border-[#fff4] max-sm:w-[90%] h-[48px] pl-5 text-white placeholder:text-white w-1/2" type="text" placeholder="Guests">
+                <input data-i18n-placeholder="inputDate" class="outline-hidden border border-[#fff4] max-sm:w-[90%] h-[48px] pl-5 text-white placeholder:text-white w-1/2" type="text" placeholder="Date">
+            </div>
+        </form>
+        <button data-i18n="bookNow" class="bg-[#B59571] py-[10px] px-5 text-white font-bold">Book now</button>
     </div>
+</div>
 
     <!-- Modal Menu -->
      <div id="menuPage" class="hidden fixed top-0 left-0 inset-0 z-40 duration-500 bg-[#333] flex items-center justify-between flex-col py-10 overflow-y-auto">
@@ -252,7 +252,7 @@
     <nav class="h-[40vh] max-sm:h-1/3 max-sm:text-[30px] flex flex-col items-center justify-between text-[48px] font-bold my-4">
          <a href="#" class="text-white" data-i18n="menu">Menu</a>
          <a href="#" class="text-white" data-i18n="delivery">Delivery</a>
-         <a href="#" class="text-white" data-i18n="payment">Payment</a>
+         <a href="./menu.html" class="text-white" data-i18n="payment">Payment</a>
     </nav>
 
     <button id="reservationBtnMenu" class="py-[10px] px-5 text-white bg-[#B59571] mb-6" data-i18n="reservation">Table reservation</button>
