@@ -538,7 +538,7 @@ function showToast(message) {
 
     setTimeout(() => {
         toast.remove();
-    }, 1000);
+    }, 2000);
 }
 
 if (formBtn) {
