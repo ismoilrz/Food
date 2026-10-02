@@ -62,7 +62,9 @@
     "inputPhone": "Phone",
     "inputGuests": "Guests",
     "inputDate": "Date",
-    "bookNow": "Book now"
+    "bookNow": "Book now",
+    "footerPrivacyPolicy": "Privacy policy",
+    "footerDesignBy": "Design d-e-n.ru"
   },
   "ru": {
     "menu": "Меню",
@@ -127,7 +129,9 @@
     "inputPhone": "Телефон",
     "inputGuests": "Гости",
     "inputDate": "Дата",
-    "bookNow": "Забронировать"
+    "bookNow": "Забронировать",
+    "footerPrivacyPolicy": "Политика конфиденциальности",
+    "footerDesignBy": "Дизайн d-e-n.ru"
     
   },
   "uz": {
@@ -193,6 +197,8 @@
     "inputPhone": "Telefon",
     "inputGuests": "Mehmonlar",
     "inputDate": "Sana",
-    "bookNow": "Band qilish"
+    "bookNow": "Band qilish",
+    "footerPrivacyPolicy": "Maxfiylik siyosati",
+    "footerDesignBy": "Dizayn d-e-n.ru"
   }
 }
