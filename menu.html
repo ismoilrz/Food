@@ -3,9 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="./assets/logo.png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@14.0.1/swiper-bundle.min.css" />
     <link rel="icon" type="image/x-icon" href="./assets/logo.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./output.css">
     <title>Food Menu</title>
 </head>
@@ -154,23 +159,24 @@
 
     <!-- Reservation Form -->
     <div id="overlay" class="hidden fixed top-0 left-0 z-50 inset-0 bg-[#0008] duration-200 items-center justify-center">
-    <div id="reservationModal" class="bg-[#333] flex flex-col items-center pb-[60px] max-sm:w-[90%]">
-        <div class="w-full flex justify-end p-5">
-            <button id="reservationCloseBtn"><img src="./assets/closebtn.svg" alt="X"></button>
-        </div>
-        <img src="./assets/logo.png" alt="">
-        <p data-i18n="bookTable" class="text-[20px] font-bold text-white mt-[10px]">Book a table</p>
-        <form id="myForm" class="flex flex-col gap-[20px] items-center px-[50px] py-8 w-[360px] max-sm:w-full max-sm:px-[3%]">
-            <input data-i18n-placeholder="inputName" class="outline-hidden border border-[#fff4] w-full max-sm:w-[90%] h-[48px] pl-5 text-white placeholder:text-white" type="text" placeholder="Name">
-            <input id="phoneInput" data-i18n-placeholder="inputPhone" class="outline-hidden border border-[#fff4] w-full max-sm:w-[90%] h-[48px] pl-5 text-white placeholder:text-white" type="text" placeholder="Phone">
-            <div class="flex gap-5 w-full max-sm:flex-col max-sm:items-center">
-                <input data-i18n-placeholder="inputGuests" class="outline-hidden border border-[#fff4] max-sm:w-[90%] h-[48px] pl-5 text-white placeholder:text-white w-1/2" type="number" min="0" placeholder="Guests">
-                <input data-i18n-placeholder="inputDate" class="outline-hidden border border-[#fff4] max-sm:w-[90%] h-[48px] pl-5 text-white placeholder:text-white w-1/2" type="date" placeholder="Date">
+        <div id="reservationModal" class="bg-[#333] flex flex-col items-center pb-[60px] max-sm:w-[90%]">
+            <div class="w-full flex justify-end p-5">
+                <button id="reservationCloseBtn"><img src="./assets/closebtn.svg" alt="X"></button>
             </div>
-        </form>
-        <button onclick="resetForm()" data-i18n="bookNow" class="bg-[#B59571] py-[10px] px-5 text-white font-bold">Book now</button>
+            <img src="./assets/logo.png" alt="Logo">
+            <p data-i18n="bookTable" class="text-[20px] font-bold text-white mt-[10px]">Book a table</p>
+            
+            <form id="myForm" class="flex flex-col gap-[20px] items-center px-[50px] py-8 w-[360px] max-sm:w-full max-sm:px-[3%]">
+                <input id="textVal" data-i18n-placeholder="inputName" class="outline-hidden border border-[#fff4] w-full max-sm:w-[90%] h-[48px] pl-5 text-white placeholder:text-white" type="text" placeholder="Name">
+                <input id="phoneInput" data-i18n-placeholder="inputPhone" class="outline-hidden border border-[#fff4] w-full max-sm:w-[90%] h-[48px] pl-5 text-white placeholder:text-white" type="text" placeholder="Phone">
+                <div class="flex gap-5 w-full max-sm:flex-col max-sm:items-center">
+                    <input id="guest" data-i18n-placeholder="inputGuests" class="outline-hidden border border-[#fff4] max-sm:w-[90%] h-[48px] pl-5 text-white placeholder:text-white w-1/2" type="number" min="1" placeholder="Guests">
+                    <input id="date" data-i18n-placeholder="inputDate" class="outline-hidden border border-[#fff4] max-sm:w-[90%] h-[48px] pl-5 text-white placeholder:text-white w-1/2" type="date" placeholder="Date">
+                </div>
+                <button type="button" id="formBtn" data-i18n="bookNow" class="bg-[#B59571] py-[10px] px-5 text-white font-bold w-full mt-2">Book now</button>
+            </form>
+        </div>
     </div>
-</div>
 
 
     <script src="./utils/global.js"></script>

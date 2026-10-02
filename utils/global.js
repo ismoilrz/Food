@@ -472,12 +472,12 @@ initApp();
 });
 
 
-function resetForm() {
-    const form = document.getElementById('myForm');
-    if (form) {
-        form.reset();
-    }
-}
+// function resetForm() {
+//     const form = document.getElementById('myForm');
+//     if (form) {
+//         form.reset();
+//     }
+// }
 
 
 

@@ -4,6 +4,10 @@ html {
     scroll-behavior: smooth;
 }
 
+body {
+  font-family: "Bricolage Grotesque";
+}
+
 .container {
     width: 100%;
     max-width: 1250px;
@@ -227,8 +231,8 @@ button {
     margin: 0;
   }
   .checkbox-wrapper-33 .checkbox__trigger:checked + .checkbox__symbol:after {
-    -webkit-animation: ripple-33 1.5s var(--e-out);
-            animation: ripple-33 1.5s var(--e-out);
+    -webkit-animation: ripple-33 0.5s var(--e-out);
+            animation: ripple-33 0.5s var(--e-out);
   }
   .checkbox-wrapper-33 .checkbox__trigger:checked + .checkbox__symbol .icon-checkbox path {
     transition: stroke-dashoffset var(--t-base) var(--e-out);
