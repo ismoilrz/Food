@@ -492,6 +492,8 @@ const formBtn = document.getElementById("formBtn");
 const phoneInput = document.getElementById("phoneInput");
 const guest = document.getElementById("guest");
 const date = document.getElementById("date");
+const overlay = document.getElementById("overlay");
+const body = document.querySelector("body")
 
 const UZ_DIGITS_LENGTH = 9;
 
@@ -529,15 +531,14 @@ if (phoneInput) {
 
 function showToast(message) {
     const toast = document.createElement("div");
-    toast.className = "fixed top-[6%] left-1/2 w-[380px] tr py-2 bg-white text-black px-6 py-3 rounded-lg shadow-lg text-[16px] font-medium transition-all duration-300 z-50";
+    toast.className = "fixed top-[6%] left-1/2 -translate-x-1/2 w-[380px] py-2 bg-white text-black px-6 py-3 rounded-lg shadow-lg text-[16px] font-medium transition-all duration-300 z-50";
     toast.textContent = message;
-    
 
     document.body.appendChild(toast);
 
     setTimeout(() => {
         toast.remove();
-    }, 3000);
+    }, 1000);
 }
 
 if (formBtn) {
@@ -548,40 +549,45 @@ if (formBtn) {
 
         let isValid = true;
 
-        if (textVal.value === "") {
-            textVal?.classList.add("border-red-400");
+        if (textVal && textVal.value === "") {
+            textVal.classList.add("border-red-400");
             isValid = false;
         }
 
-        if (phoneInput.value.length < 12) {
-            phoneInput?.classList.add("border-red-400");
+        if (phoneInput && phoneInput.value.length < 12) {
+            phoneInput.classList.add("border-red-400");
             isValid = false;
         }
 
-        if (guest.value === "") {
-            guest?.classList.add("border-red-400");
+        if (guest && guest.value === "") {
+            guest.classList.add("border-red-400");
             isValid = false;
         }
 
-        if (date.value === "") {
-            date?.classList.add("border-red-400");
+        if (date && date.value === "") {
+            date.classList.add("border-red-400");
             isValid = false;
         }
 
         if (isValid) {
             console.log("Yuborildi", {
-                text: textVal.value,
-                phone: phoneInput.value,
-                guest: guest.value,
-                date: date.value
+                text: textVal ? textVal.value : "",
+                phone: phoneInput ? phoneInput.value : "",
+                guest: guest ? guest.value : "",
+                date: date ? date.value : ""
             });
 
-            showToast("Muvaffaqiyatli muborildi!");
+            showToast("Muvaffaqiyatli yuborildi!");
 
-            textVal.value = "";
-            phoneInput.value = "";
-            guest.value = "";
-            date.value = "";
+            setTimeout(() => {
+                overlay?.classList.add("hidden");
+                body.classList.add("overflow-y-auto")
+
+                if (textVal) textVal.value = "";
+                if (phoneInput) phoneInput.value = "";
+                if (guest) guest.value = "";
+                if (date) date.value = "";
+            }, 1000);
         }
     });
 }
