@@ -970,6 +970,9 @@
     .max-sm\:w-\[60px\] {
       width: 60px;
     }
+    .max-sm\:w-\[80\%\] {
+      width: 80%;
+    }
     .max-sm\:w-\[90\%\] {
       width: 90%;
     }

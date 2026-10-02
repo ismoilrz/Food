@@ -531,7 +531,7 @@ if (phoneInput) {
 
 function showToast(message) {
     const toast = document.createElement("div");
-    toast.className = "fixed top-[6%] left-1/2 -translate-x-1/2 w-[380px] py-2 bg-white text-black px-6 py-3 rounded-lg shadow-lg text-[16px] font-medium transition-all duration-300 z-50";
+    toast.className = "fixed top-[6%] left-1/2 -translate-x-1/2 w-[380px] max-sm:w-[80%] py-2 bg-white text-black px-6 py-3 rounded-lg shadow-lg text-[16px] font-medium transition-all duration-300 z-50";
     toast.textContent = message;
 
     document.body.appendChild(toast);
