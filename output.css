@@ -195,14 +195,11 @@
   .top-0 {
     top: 0px;
   }
+  .top-\[6\%\] {
+    top: 6%;
+  }
   .right-0 {
     right: 0px;
-  }
-  .right-5 {
-    right: calc(var(--spacing) * 5);
-  }
-  .bottom-5 {
-    bottom: calc(var(--spacing) * 5);
   }
   .left-0 {
     left: 0px;
@@ -390,8 +387,11 @@
   .w-\[310px\] {
     width: 310px;
   }
-  .w-\[360px\] {
-    width: 360px;
+  .w-\[380px\] {
+    width: 380px;
+  }
+  .w-\[450px\] {
+    width: 450px;
   }
   .w-full {
     width: 100%;
@@ -583,6 +583,9 @@
   .px-\[50px\] {
     padding-inline: 50px;
   }
+  .py-2 {
+    padding-block: calc(var(--spacing) * 2);
+  }
   .py-2\.5 {
     padding-block: calc(var(--spacing) * 2.5);
   }
@@ -627,6 +630,9 @@
   }
   .pt-\[200px\] {
     padding-top: 200px;
+  }
+  .pr-3 {
+    padding-right: calc(var(--spacing) * 3);
   }
   .pb-1 {
     padding-bottom: var(--spacing);
@@ -1075,6 +1081,9 @@ button {
 .loc {
   background-image: url("./assets/location.jpg");
   background-size: cover;
+}
+.tr {
+  transform: translateX(-50%) !important;
 }
 .mySwiper .swiper-slide {
   opacity: 1 !important;

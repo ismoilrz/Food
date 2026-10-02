@@ -81,8 +81,9 @@ button {
     background-size: cover;
 }
 
-
-
+.tr {
+  transform: translateX(-50%) !important;
+}
 
 
 

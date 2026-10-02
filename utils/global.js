@@ -409,21 +409,31 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     menuButtons?.addEventListener('click', (e) => {
-        const btn = e.target.closest('.menu-btn');
-        if (!btn) return;
+    const btn = e.target.closest('.menu-btn');
+    if (!btn) return;
 
-        activeCategory = btn.getAttribute('data-category');
+    const selectedCategory = btn.getAttribute('data-category');
 
-        document.querySelectorAll('.menu-btn').forEach(b => {
-            b.classList.remove('border-b-2', 'border-[#B59571]', 'text-[#B59571]');
-            b.classList.add('text-[#333]');
-        });
+    const urlParams = new URLSearchParams(window.location.search);
+    const isDetailPage = urlParams.has('id');
 
-        btn.classList.remove('text-[#333]');
-        btn.classList.add('border-b-2', 'border-[#B59571]', 'text-[#B59571]');
+    if (isDetailPage || !menuCon) {
+        window.location.href = `menu.html?category=${selectedCategory}`;
+        return;
+    }
 
-        renderMenuItems(activeCategory);
+    activeCategory = selectedCategory;
+
+    document.querySelectorAll('.menu-btn').forEach(b => {
+        b.classList.remove('border-b-2', 'border-[#B59571]', 'text-[#B59571]');
+        b.classList.add('text-[#333]');
     });
+
+    btn.classList.remove('text-[#333]');
+    btn.classList.add('border-b-2', 'border-[#B59571]', 'text-[#B59571]');
+
+    renderMenuItems(activeCategory);
+});
 
     document.addEventListener('click', (e) => {
         const option = e.target.closest('.lang-option, .mobile-lang-option');
@@ -454,6 +464,11 @@ async function initApp() {
 
     const urlParams = new URLSearchParams(window.location.search);
     const productId = urlParams.get('id');
+    const categoryParam = urlParams.get('category');
+
+    if (categoryParam) {
+        activeCategory = categoryParam;
+    }
 
     if (menuButtons) {
         renderMenuButtons();
@@ -471,27 +486,6 @@ async function initApp() {
 initApp();
 });
 
-
-// function resetForm() {
-//     const form = document.getElementById('myForm');
-//     if (form) {
-//         form.reset();
-//     }
-// }
-
-
-
-// export function formatUzDigits(digits) {
-//   const clean = digits.replace(/\D/g, "").slice(0, UZ_DIGITS_LENGTH);
-//   const parts = [
-//     clean.slice(0, 2),
-//     clean.slice(2, 5),
-//     clean.slice(5, 7),
-//     clean.slice(7, 9),
-//   ].filter(Boolean);
-
-//   return parts.join(" ");
-// }
 
 const textVal = document.getElementById("textVal");
 const formBtn = document.getElementById("formBtn");
@@ -535,8 +529,9 @@ if (phoneInput) {
 
 function showToast(message) {
     const toast = document.createElement("div");
-    toast.className = "fixed bottom-5 right-5 bg-white text-black px-6 py-3 rounded-lg shadow-lg text-sm font-medium transition-all duration-300 z-50";
+    toast.className = "fixed top-[6%] left-1/2 w-[380px] tr py-2 bg-white text-black px-6 py-3 rounded-lg shadow-lg text-[16px] font-medium transition-all duration-300 z-50";
     toast.textContent = message;
+    
 
     document.body.appendChild(toast);
 
@@ -581,7 +576,7 @@ if (formBtn) {
                 date: date.value
             });
 
-            showToast("Yuborildi");
+            showToast("Muvaffaqiyatli muborildi!");
 
             textVal.value = "";
             phoneInput.value = "";
