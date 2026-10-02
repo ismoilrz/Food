@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const menuButtons = document.getElementById('menuButtons');
     const menuCon = document.getElementById('menuCon');
+    const productDetailCon = document.getElementById('productDetailCon');
 
     const flagMap = {
         en: 'fi-gb',
@@ -31,13 +32,13 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const MenuBtns = [
-    { id: 1, key: 'Breakfast', labelKey: 'menuBtnBreakfast' },
-    { id: 2, key: 'Raw', labelKey: 'menuBtnRaw' },
-    { id: 3, key: 'Bruschetts', labelKey: 'menuBtnBruschetts' },
-    { id: 4, key: 'Salads', labelKey: 'menuBtnSalads' },
-    { id: 5, key: 'Meat', labelKey: 'menuBtnMeat' },
-    { id: 6, key: 'Fish', labelKey: 'menuBtnFish' }
-];
+        { id: 1, key: 'Breakfast', labelKey: 'menuBtnBreakfast' },
+        { id: 2, key: 'Raw', labelKey: 'menuBtnRaw' },
+        { id: 3, key: 'Bruschetts', labelKey: 'menuBtnBruschetts' },
+        { id: 4, key: 'Salads', labelKey: 'menuBtnSalads' },
+        { id: 5, key: 'Meat', labelKey: 'menuBtnMeat' },
+        { id: 6, key: 'Fish', labelKey: 'menuBtnFish' }
+    ];
 
     const MenuData = [
         { id: 1, url: "./assets/menufood1.png", title: "Fried eggs from three eggs", price: "250₽", type: "Breakfast" },
@@ -89,195 +90,182 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     function getTranslatedTitle(item) {
-    return translations[currentLang]?.menuData?.[item.id]?.title || item.title;
-}
-
-    function renderMenuItems(category) {
-    if (!menuCon) return;
-    const filterData = MenuData.filter(item => item.type === category);
-
-    if (filterData.length === 0) {
-        const notFoundText = translations[currentLang]?.notFound || "Ushbu kategoriyada taomlar topilmadi.";
-        menuCon.innerHTML = `<p class="text-gray-500 py-10">${notFoundText}</p>`;
-        return;
+        return translations[currentLang]?.menuData?.[item.id]?.title || item.title;
     }
 
-    const btnText = translations[currentLang]?.addToCart || "Add to cart";
+    function renderMenuItems(category) {
+        if (!menuCon) return;
+        const filterData = MenuData.filter(item => item.type === category);
 
-    menuCon.innerHTML = filterData.map(item => {
-        const itemTitle = getTranslatedTitle(item);
-        
-        return `
-            <div data-id="${item.id}" class="menu-card cursor-pointer w-[300px] max-sm:w-full border border-[#3333337c] flex flex-col items-center justify-between">
-                <img class="w-full h-[220px] object-cover" src="${item.url}" alt="${itemTitle}" />
-                <h5 class="py-[20px] text-[18px] font-bold text-[#333] text-center max-w-[90%]">${itemTitle}</h5>
-                <div class="w-[90%] flex justify-between items-center mb-[15px]">
-                    <strong class="text-[24px] font-bold text-[#333]">${item.price}</strong>
-                    <button class="add-to-cart-btn py-[8px] px-4 bg-[#B59571] font-bold text-[#fff] text-sm hover:opacity-90 transition-opacity">${btnText}</button>
-                </div>
-            </div>
-        `;
-    }).join("");
-}
+        if (filterData.length === 0) {
+            const notFoundText = translations[currentLang]?.notFound || "Ushbu kategoriyada taomlar topilmadi.";
+            menuCon.innerHTML = `<p class="text-gray-500 py-10">${notFoundText}</p>`;
+            return;
+        }
 
+        const btnText = translations[currentLang]?.addToCart || "Add to cart";
 
-function renderProductDetail(productId) {
-    if (!menuCon) return;
-    const product = MenuData.find(item => item.id === Number(productId));
-
-    if (!product) return;
-
-    const lang = translations[currentLang] || {};
-    const productTitle = lang.menuData?.[product.id]?.title || product.title;
-    const btnText = lang.addToCart || "Add to card";
-    const portionText = lang.portion || "gramm";
-    const portionsCountText = lang.portionsCount || "Number of portions:";
-    const makeItTastierText = lang.makeItTastier || "Make it even tastier";
-    const tigerPrawnsText = lang.tigerPrawns || "Tiger prawns 60 g";
-
-    menuCon.innerHTML = `
-    <div class="w-full flex justify-center gap-[134px] max-lg:flex-col max-lg:items-center">
-        <!-- Rasm slayder qismi -->
-        <div class="product-slider-wrapper">
-            <div style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff" class="swiper mySwiper2">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <img src="${product.url}" alt="${productTitle}" />
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="${product.url}" alt="${productTitle}" />
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="${product.url}" alt="${productTitle}" />
+        menuCon.innerHTML = filterData.map(item => {
+            const itemTitle = getTranslatedTitle(item);
+            
+            return `
+                <div data-id="${item.id}" class="menu-card cursor-pointer w-[300px] max-sm:w-full border border-[#3333337c] flex flex-col items-center justify-between">
+                    <img class="w-full h-[220px] object-cover" src="${item.url}" alt="${itemTitle}" />
+                    <h5 class="py-[20px] text-[18px] font-bold text-[#333] text-center max-w-[90%]">${itemTitle}</h5>
+                    <div class="w-[90%] flex justify-between items-center mb-[15px]">
+                        <strong class="text-[24px] font-bold text-[#333]">${item.price}</strong>
+                        <button class="add-to-cart-btn py-[8px] px-4 bg-[#B59571] font-bold text-[#fff] text-sm hover:opacity-90 transition-opacity">${btnText}</button>
                     </div>
                 </div>
-            </div>
+            `;
+        }).join("");
+    }
 
-            <div thumbsSlider="" class="swiper mySwiper">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <img src="${product.url}" alt="${productTitle}" />
+    function renderProductDetail(productId) {
+        if (!productDetailCon) return;
+        const product = MenuData.find(item => item.id === Number(productId));
+
+        if (!product) {
+            productDetailCon.innerHTML = `<p class="text-center text-red-500 text-xl py-10">Mahsulot topilmadi!</p>`;
+            return;
+        }
+
+        const lang = translations[currentLang] || {};
+        const productTitle = getTranslatedTitle(product);
+        const btnText = lang.addToCart || "Add to cart";
+        const portionText = lang.portion || "gramm";
+        const portionsCountText = lang.portionsCount || "Number of portions:";
+        const makeItTastierText = lang.makeItTastier || "Make it even tastier";
+        const tigerPrawnsText = lang.tigerPrawns || "Tiger prawns 60 g";
+
+        productDetailCon.innerHTML = `
+        <div class="w-full flex justify-center gap-[134px] max-lg:flex-col max-lg:items-center">
+            <div class="product-slider-wrapper">
+                <div style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff" class="swiper mySwiper2 mb-4 max-w-[400px]">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide"><img class="w-full h-[350px]" src="${product.url}" alt="${productTitle}" /></div>
+                        <div class="swiper-slide"><img class="w-full h-[350px]" src="${product.url}" alt="${productTitle}" /></div>
+                        <div class="swiper-slide"><img class="w-full h-[350px]" src="${product.url}" alt="${productTitle}" /></div>
                     </div>
-                    <div class="swiper-slide">
-                        <img src="${product.url}" alt="${productTitle}" />
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="${product.url}" alt="${productTitle}" />
+                </div>
+
+                <div thumbsSlider="" class="swiper mySwiper max-w-[400px]">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide cursor-pointer"><img class="w-full h-[80px]" src="${product.url}" alt="${productTitle}" /></div>
+                        <div class="swiper-slide cursor-pointer"><img class="w-full h-[80px]" src="${product.url}" alt="${productTitle}" /></div>
+                        <div class="swiper-slide cursor-pointer"><img class="w-full h-[80px]" src="${product.url}" alt="${productTitle}" /></div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Mahsulot ma'lumotlari va qo'shimchalar qismi -->
-        <div class="w-[310px] max-sm:px-[5%] max-sm:mt-[-30px]">
-            <h3 class="text-[32px] font-bold text-[#333]">${productTitle}</h3>
-            <hr class="text-[#33333375] my-[35px]" />
-            
-            <div>
-                <b class="text-[32px] font-bold text-[#333]">${product.price}</b>
-                <span class="font-bold text-[#33333375]">/ 400 ${portionText}</span>
-            </div>
-            
-            <p class="font-bold text-[#333] mt-6 mb-[30px]">${portionsCountText}</p>
-            <div class="flex gap-5">
-                <input class="w-[84px] h-[58px] border-2 pl-6 text-[22px] outline-hidden text-[#000] border-[#33333375]" type="number" value="1" min="1">
-                <button class="px-[30px] py-[10px] text-[16px] max-sm:text-[14px] text-[#fff] font-bold bg-[#B59571] hover:opacity-90 transition-opacity">${btnText}</button>
-            </div>
-            
-            <hr class="mt-11 mb-3 text-[#33333375]" />
-            
-            <!-- Qo'shimchalar (Toppings) qismi -->
-            <div>
-                <b class="text-[32px] font-bold text-[#333]">${makeItTastierText}</b>
+            <div class="w-[310px] max-sm:px-[5%] max-sm:mt-[-30px]">
+                <h3 class="text-[32px] font-bold text-[#333]">${productTitle}</h3>
+                <hr class="text-[#33333375] my-[35px]" />
                 
-                <div class="flex justify-between items-center mt-5">
-                    <div class="flex flex-col gap-[5px]">
-                        <p class="text-[#33333375] font-bold">${tigerPrawnsText}</p>
-                        <b class="text-[20px] font-bold">450 ₽</b>
+                <div>
+                    <b class="text-[32px] font-bold text-[#333]">${product.price}</b>
+                    <span class="font-bold text-[#33333375]">/ 400 ${portionText}</span>
+                </div>
+                
+                <p class="font-bold text-[#333] mt-6 mb-[30px]">${portionsCountText}</p>
+                <div class="flex gap-5">
+                    <input class="w-[84px] h-[58px] border-2 pl-6 text-[22px] outline-hidden text-[#000] border-[#33333375]" type="number" value="1" min="1">
+                    <button class="px-[30px] py-[10px] text-[16px] max-sm:text-[14px] text-[#fff] font-bold bg-[#B59571] hover:opacity-90 transition-opacity">${btnText}</button>
+                </div>
+                
+                <hr class="mt-11 mb-3 text-[#33333375]" />
+                
+                <div>
+                    <b class="text-[32px] font-bold text-[#333]">${makeItTastierText}</b>
+                    
+                    <div class="flex justify-between items-center mt-5">
+                        <div class="flex flex-col gap-[5px]">
+                            <p class="text-[#33333375] font-bold">${tigerPrawnsText}</p>
+                            <b class="text-[20px] font-bold">450 ₽</b>
+                        </div>
+                            <div class="checkbox-wrapper-33">
+                                <label class="checkbox">
+                                    <input class="checkbox__trigger visuallyhidden" type="checkbox" />
+                                    <span class="checkbox__symbol">
+                                    <svg aria-hidden="true" class="icon-checkbox" width="28px" height="28px" viewBox="0 0 28 28" version="1" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M4 14l8 7L24 7"></path>
+                                    </svg>
+                                    </span>
+                                </label>
+                            </div>
                     </div>
-                    <div class="checkbox-wrapper-33">
-                        <label class="checkbox">
-                            <input class="checkbox__trigger visuallyhidden" type="checkbox" />
-                            <span class="checkbox__symbol">
-                                <svg aria-hidden="true" class="icon-checkbox" width="28px" height="28px" viewBox="0 0 28 28" version="1" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M4 14l8 7L24 7"></path>
-                                </svg>
-                            </span>
-                        </label>
+
+                    <div class="flex justify-between items-center mt-5">
+                        <div class="flex flex-col gap-[5px]">
+                            <p class="text-[#33333375] font-bold">${tigerPrawnsText}</p>
+                            <b class="text-[20px] font-bold">450 ₽</b>
+                        </div>
+                         <div class="checkbox-wrapper-33">
+                                <label class="checkbox">
+                                    <input class="checkbox__trigger visuallyhidden" type="checkbox" />
+                                    <span class="checkbox__symbol">
+                                    <svg aria-hidden="true" class="icon-checkbox" width="28px" height="28px" viewBox="0 0 28 28" version="1" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M4 14l8 7L24 7"></path>
+                                    </svg>
+                                    </span>
+                                </label>
+                            </div>
+                    </div>
+                    <div class="flex justify-between items-center mt-5">
+                        <div class="flex flex-col gap-[5px]">
+                            <p class="text-[#33333375] font-bold">${tigerPrawnsText}</p>
+                            <b class="text-[20px] font-bold">450 ₽</b>
+                        </div>
+                         <div class="checkbox-wrapper-33">
+                                <label class="checkbox">
+                                    <input class="checkbox__trigger visuallyhidden" type="checkbox" />
+                                    <span class="checkbox__symbol">
+                                    <svg aria-hidden="true" class="icon-checkbox" width="28px" height="28px" viewBox="0 0 28 28" version="1" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M4 14l8 7L24 7"></path>
+                                    </svg>
+                                    </span>
+                                </label>
+                            </div>
+                    </div>
+                    <div class="flex justify-between items-center mt-5">
+                        <div class="flex flex-col gap-[5px]">
+                            <p class="text-[#33333375] font-bold">${tigerPrawnsText}</p>
+                            <b class="text-[20px] font-bold">450 ₽</b>
+                        </div>
+                         <div class="checkbox-wrapper-33">
+                                <label class="checkbox">
+                                    <input class="checkbox__trigger visuallyhidden" type="checkbox" />
+                                    <span class="checkbox__symbol">
+                                    <svg aria-hidden="true" class="icon-checkbox" width="28px" height="28px" viewBox="0 0 28 28" version="1" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M4 14l8 7L24 7"></path>
+                                    </svg>
+                                    </span>
+                                </label>
+                            </div>
                     </div>
                 </div>
-
-                <div class="flex justify-between items-center mt-5">
-                    <div class="flex flex-col gap-[5px]">
-                        <p class="text-[#33333375] font-bold">${tigerPrawnsText}</p>
-                        <b class="text-[20px] font-bold">450 ₽</b>
-                    </div>
-                    <div class="checkbox-wrapper-33">
-                        <label class="checkbox">
-                            <input class="checkbox__trigger visuallyhidden" type="checkbox" />
-                            <span class="checkbox__symbol">
-                                <svg aria-hidden="true" class="icon-checkbox" width="28px" height="28px" viewBox="0 0 28 28" version="1" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M4 14l8 7L24 7"></path>
-                                </svg>
-                            </span>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="flex justify-between items-center mt-5">
-                    <div class="flex flex-col gap-[5px]">
-                        <p class="text-[#33333375] font-bold">${tigerPrawnsText}</p>
-                        <b class="text-[20px] font-bold">450 ₽</b>
-                    </div>
-                    <div class="checkbox-wrapper-33">
-                        <label class="checkbox">
-                            <input class="checkbox__trigger visuallyhidden" type="checkbox" />
-                            <span class="checkbox__symbol">
-                                <svg aria-hidden="true" class="icon-checkbox" width="28px" height="28px" viewBox="0 0 28 28" version="1" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M4 14l8 7L24 7"></path>
-                                </svg>
-                            </span>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="flex justify-between items-center mt-5">
-                    <div class="flex flex-col gap-[5px]">
-                        <p class="text-[#33333375] font-bold">${tigerPrawnsText}</p>
-                        <b class="text-[20px] font-bold">450 ₽</b>
-                    </div>
-                    <div class="checkbox-wrapper-33">
-                        <label class="checkbox">
-                            <input class="checkbox__trigger visuallyhidden" type="checkbox" />
-                            <span class="checkbox__symbol">
-                                <svg aria-hidden="true" class="icon-checkbox" width="28px" height="28px" viewBox="0 0 28 28" version="1" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M4 14l8 7L24 7"></path>
-                                </svg>
-                            </span>
-                        </label>
-                    </div>
-                </div>
-
             </div>
         </div>
-    </div>
-    `;
+        `;
 
-    // Swiper slayderlarini ishga tushiramiz
-    const swiperThumb = new Swiper('.mySwiper', {
-        spaceBetween: 12,        
-        slidesPerView: 3,       
-        freeMode: true,
-        watchSlidesProgress: true,
-    });
+        if (typeof Swiper !== 'undefined') {
+            setTimeout(() => {
+                const swiperThumb = new Swiper('.mySwiper', {
+                    spaceBetween: 12,        
+                    slidesPerView: 3,       
+                    freeMode: true,
+                    watchSlidesProgress: true,
+                });
 
-    new Swiper('.mySwiper2', {
-        spaceBetween: 10,
-        thumbs: {
-            swiper: swiperThumb,
-        },
-    });
-}
+                new Swiper('.mySwiper2', {
+                    spaceBetween: 10,
+                    thumbs: {
+                        swiper: swiperThumb,
+                    },
+                });
+            }, 100);
+        }
+    }
 
     menuCon?.addEventListener('click', (e) => {
         if (e.target.classList.contains('add-to-cart-btn')) {
@@ -285,37 +273,35 @@ function renderProductDetail(productId) {
             return;
         }
 
-        if (e.target.id === 'backToMenuBtn') return;
-
         const card = e.target.closest('.menu-card');
         if (card) {
             const productId = card.getAttribute('data-id');
-            renderProductDetail(productId);
+            window.location.href = `menuDetail.html?id=${productId}`;
         }
     });
 
-   function renderMenuButtons() {
-    if (!menuButtons) return;
+    function renderMenuButtons() {
+        if (!menuButtons) return;
 
-    menuButtons.innerHTML = MenuBtns.map(item => {
-        const isActive = item.key === activeCategory;
-        const labelText = translations[currentLang]?.[item.labelKey] || item.key;
+        menuButtons.innerHTML = MenuBtns.map(item => {
+            const isActive = item.key === activeCategory;
+            const labelText = translations[currentLang]?.[item.labelKey] || item.key;
 
-        return `
-            <button 
-                data-category="${item.key}" 
-                data-i18n="${item.labelKey}"
-                class="menu-btn transition-colors duration-200 font-medium hover:text-[#b59571] pb-1 ${
-                    isActive ? 'border-b-2 border-[#B59571] text-[#B59571]' : 'text-[#333]'
-                }"
-            >
-                ${labelText}
-            </button>
-        `;
-    }).join("");
+            return `
+                <button 
+                    data-category="${item.key}" 
+                    data-i18n="${item.labelKey}"
+                    class="menu-btn transition-colors duration-200 font-medium hover:text-[#b59571] pb-1 ${
+                        isActive ? 'border-b-2 border-[#B59571] text-[#B59571]' : 'text-[#333]'
+                    }"
+                >
+                    ${labelText}
+                </button>
+            `;
+        }).join("");
 
-    renderMenuItems(activeCategory);
-}
+        renderMenuItems(activeCategory);
+    }
 
     async function loadTranslations() {
         try {
@@ -328,40 +314,46 @@ function renderProductDetail(productId) {
         }
     }
 
-   function changeLanguage(lang) {
-    currentLang = lang;
-    localStorage.setItem('appLang', lang);
+    function changeLanguage(lang) {
+        currentLang = lang;
+        localStorage.setItem('appLang', lang);
 
-    if (currentLangSpan && currentFlagSpan) {
-        currentLangSpan.textContent = lang.toUpperCase();
-        currentFlagSpan.className = `fi ${flagMap[lang]} text-base rounded-[2px]`;
+        if (currentLangSpan && currentFlagSpan) {
+            currentLangSpan.textContent = lang.toUpperCase();
+            currentFlagSpan.className = `fi ${flagMap[lang]} text-base rounded-[2px]`;
+        }
+
+        if (mobileCurrentLang && mobileCurrentFlag) {
+            mobileCurrentLang.textContent = lang.toUpperCase();
+            mobileCurrentFlag.className = `fi ${flagMap[lang]} text-base rounded-[2px]`;
+        }
+
+        if (translations[lang]) {
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+                const key = element.getAttribute('data-i18n-placeholder');
+                if (translations[lang][key]) {
+                    element.placeholder = translations[lang][key];
+                }
+            });
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('id');
+
+        if (productId && productDetailCon) {
+            renderProductDetail(productId);
+        } else if (menuCon) {
+            renderMenuButtons();
+        }
     }
 
-    if (mobileCurrentLang && mobileCurrentFlag) {
-        mobileCurrentLang.textContent = lang.toUpperCase();
-        mobileCurrentFlag.className = `fi ${flagMap[lang]} text-base rounded-[2px]`;
-    }
-
-    if (translations[lang]) {
-        // Matnlarni (textContent) tarjima qilish
-        document.querySelectorAll('[data-i18n]').forEach(element => {
-            const key = element.getAttribute('data-i18n');
-            if (translations[lang][key]) {
-                element.textContent = translations[lang][key];
-            }
-        });
-
-        // Input placeholder'larini tarjima qilish
-        document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
-            const key = element.getAttribute('data-i18n-placeholder');
-            if (translations[lang][key]) {
-                element.placeholder = translations[lang][key];
-            }
-        });
-    }
-
-    renderMenuButtons();
-}
     menuBtn?.addEventListener('click', () => {
         body.classList.add('overflow-hidden');
         menuPage?.classList.remove('hidden');
@@ -456,6 +448,145 @@ function renderProductDetail(productId) {
         }
     });
 
-    renderMenuButtons();
-    loadTranslations();
+
+async function initApp() {
+    await loadTranslations();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('id');
+
+    if (menuButtons) {
+        renderMenuButtons();
+    }
+
+    if (menuCon) {
+        renderMenuItems(activeCategory);
+    }
+
+    if (productId && productDetailCon) {
+        renderProductDetail(productId);
+    }
+}
+
+initApp();
 });
+
+
+function resetForm() {
+    const form = document.getElementById('myForm');
+    if (form) {
+        form.reset();
+    }
+}
+
+
+
+// export function formatUzDigits(digits) {
+//   const clean = digits.replace(/\D/g, "").slice(0, UZ_DIGITS_LENGTH);
+//   const parts = [
+//     clean.slice(0, 2),
+//     clean.slice(2, 5),
+//     clean.slice(5, 7),
+//     clean.slice(7, 9),
+//   ].filter(Boolean);
+
+//   return parts.join(" ");
+// }
+
+const textVal = document.getElementById("textVal");
+const formBtn = document.getElementById("formBtn");
+const phoneInput = document.getElementById("phoneInput");
+const guest = document.getElementById("guest");
+const date = document.getElementById("date");
+
+const UZ_DIGITS_LENGTH = 9;
+
+function formatUzDigits(digits) {
+    if (!digits) return "";
+    const clean = digits.replace(/\D/g, "").slice(0, UZ_DIGITS_LENGTH);
+    const parts = [
+        clean.slice(0, 2),
+        clean.slice(2, 5),
+        clean.slice(5, 7),
+        clean.slice(7, 9),
+    ].filter(Boolean);
+    return parts.join(" ");
+}
+
+if (phoneInput) {
+    phoneInput.addEventListener("input", (e) => {
+        e.target.value = formatUzDigits(e.target.value);
+        phoneInput.classList.remove("border-red-400");
+    });
+}
+
+[textVal, guest, date].forEach(input => {
+    if (input) {
+        input.addEventListener("input", () => {
+            input.classList.remove("border-red-400");
+        });
+        if (input.type === "date") {
+            input.addEventListener("change", () => {
+                input.classList.remove("border-red-400");
+            });
+        }
+    }
+});
+
+function showToast(message) {
+    const toast = document.createElement("div");
+    toast.className = "fixed bottom-5 right-5 bg-white text-black px-6 py-3 rounded-lg shadow-lg text-sm font-medium transition-all duration-300 z-50";
+    toast.textContent = message;
+
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+        toast.remove();
+    }, 3000);
+}
+
+if (formBtn) {
+    formBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        [textVal, phoneInput, guest, date].forEach(input => input?.classList.remove("border-red-400"));
+
+        let isValid = true;
+
+        if (textVal.value === "") {
+            textVal?.classList.add("border-red-400");
+            isValid = false;
+        }
+
+        if (phoneInput.value.length < 12) {
+            phoneInput?.classList.add("border-red-400");
+            isValid = false;
+        }
+
+        if (guest.value === "") {
+            guest?.classList.add("border-red-400");
+            isValid = false;
+        }
+
+        if (date.value === "") {
+            date?.classList.add("border-red-400");
+            isValid = false;
+        }
+
+        if (isValid) {
+            console.log("Yuborildi", {
+                text: textVal.value,
+                phone: phoneInput.value,
+                guest: guest.value,
+                date: date.value
+            });
+
+            showToast("Yuborildi");
+
+            textVal.value = "";
+            phoneInput.value = "";
+            guest.value = "";
+            date.value = "";
+        }
+    });
+}
