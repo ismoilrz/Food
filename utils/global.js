@@ -76,6 +76,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let activeCategory = 'Breakfast';
     let translations = {};
     let currentLang = localStorage.getItem('appLang') || 'en';
+    let swiperThumbInstance = null;
+    // let swiperMainInstance = null;
 
     const openReservationModal = () => {
         body.classList.add('overflow-hidden');
@@ -89,16 +91,13 @@ document.addEventListener('DOMContentLoaded', () => {
         overlay?.classList.add('hidden');
     };
 
-    function getTranslatedTitle(item) {
-        return translations[currentLang]?.menuData?.[item.id]?.title || item.title;
-    }
 
     function renderMenuItems(category) {
         if (!menuCon) return;
         const filterData = MenuData.filter(item => item.type === category);
 
         if (filterData.length === 0) {
-            const notFoundText = translations[currentLang]?.notFound || "Ushbu kategoriyada taomlar topilmadi.";
+            const notFoundText = translations[currentLang]?.notFound || "Taomlar topilmadi";
             menuCon.innerHTML = `<p class="text-gray-500 py-10">${notFoundText}</p>`;
             return;
         }
@@ -126,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const product = MenuData.find(item => item.id === Number(productId));
 
         if (!product) {
-            productDetailCon.innerHTML = `<p class="text-center text-red-500 text-xl py-10">Mahsulot topilmadi!</p>`;
+            productDetailCon.innerHTML = `<p>Malumot yoq</p>`;
             return;
         }
 
@@ -138,22 +137,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const makeItTastierText = lang.makeItTastier || "Make it even tastier";
         const tigerPrawnsText = lang.tigerPrawns || "Tiger prawns 60 g";
 
+        const extraOptions = Array(4).fill(null);
+
         productDetailCon.innerHTML = `
         <div class="w-full flex justify-center gap-[134px] max-lg:flex-col max-lg:items-center">
             <div class="product-slider-wrapper">
                 <div style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff" class="swiper mySwiper2 mb-4 max-w-[400px]">
                     <div class="swiper-wrapper">
-                        <div class="swiper-slide"><img class="w-full h-[350px]" src="${product.url}" alt="${productTitle}" /></div>
-                        <div class="swiper-slide"><img class="w-full h-[350px]" src="${product.url}" alt="${productTitle}" /></div>
-                        <div class="swiper-slide"><img class="w-full h-[350px]" src="${product.url}" alt="${productTitle}" /></div>
+                        <div class="swiper-slide"><img class="w-full h-[350px] object-cover" src="${product.url}" alt="${productTitle}" /></div>
+                        <div class="swiper-slide"><img class="w-full h-[350px] object-cover" src="${product.url}" alt="${productTitle}" /></div>
+                        <div class="swiper-slide"><img class="w-full h-[350px] object-cover" src="${product.url}" alt="${productTitle}" /></div>
                     </div>
                 </div>
 
                 <div thumbsSlider="" class="swiper mySwiper max-w-[400px]">
                     <div class="swiper-wrapper">
-                        <div class="swiper-slide cursor-pointer"><img class="w-full h-[80px]" src="${product.url}" alt="${productTitle}" /></div>
-                        <div class="swiper-slide cursor-pointer"><img class="w-full h-[80px]" src="${product.url}" alt="${productTitle}" /></div>
-                        <div class="swiper-slide cursor-pointer"><img class="w-full h-[80px]" src="${product.url}" alt="${productTitle}" /></div>
+                        <div class="swiper-slide cursor-pointer"><img class="w-full h-[80px] object-cover" src="${product.url}" alt="${productTitle}" /></div>
+                        <div class="swiper-slide cursor-pointer"><img class="w-full h-[80px] object-cover" src="${product.url}" alt="${productTitle}" /></div>
+                        <div class="swiper-slide cursor-pointer"><img class="w-full h-[80px] object-cover" src="${product.url}" alt="${productTitle}" /></div>
                     </div>
                 </div>
             </div>
@@ -178,93 +179,44 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div>
                     <b class="text-[32px] font-bold text-[#333]">${makeItTastierText}</b>
                     
-                    <div class="flex justify-between items-center mt-5">
-                        <div class="flex flex-col gap-[5px]">
-                            <p class="text-[#33333375] font-bold">${tigerPrawnsText}</p>
-                            <b class="text-[20px] font-bold">450 ₽</b>
-                        </div>
+                    ${extraOptions.map((_, idx) => `
+                        <div class="flex justify-between items-center mt-5">
+                            <div class="flex flex-col gap-[5px]">
+                                <p class="text-[#33333375] font-bold">${tigerPrawnsText}</p>
+                                <b class="text-[20px] font-bold">450 ₽</b>
+                            </div>
                             <div class="checkbox-wrapper-33">
                                 <label class="checkbox">
-                                    <input class="checkbox__trigger visuallyhidden" type="checkbox" />
+                                    <input id="extra-check-${idx}" class="checkbox__trigger visuallyhidden" type="checkbox" />
                                     <span class="checkbox__symbol">
-                                    <svg aria-hidden="true" class="icon-checkbox" width="28px" height="28px" viewBox="0 0 28 28" version="1" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M4 14l8 7L24 7"></path>
-                                    </svg>
+                                        <svg aria-hidden="true" class="icon-checkbox" width="28px" height="28px" viewBox="0 0 28 28" version="1" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M4 14l8 7L24 7"></path>
+                                        </svg>
                                     </span>
                                 </label>
                             </div>
-                    </div>
-
-                    <div class="flex justify-between items-center mt-5">
-                        <div class="flex flex-col gap-[5px]">
-                            <p class="text-[#33333375] font-bold">${tigerPrawnsText}</p>
-                            <b class="text-[20px] font-bold">450 ₽</b>
                         </div>
-                         <div class="checkbox-wrapper-33">
-                                <label class="checkbox">
-                                    <input class="checkbox__trigger visuallyhidden" type="checkbox" />
-                                    <span class="checkbox__symbol">
-                                    <svg aria-hidden="true" class="icon-checkbox" width="28px" height="28px" viewBox="0 0 28 28" version="1" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M4 14l8 7L24 7"></path>
-                                    </svg>
-                                    </span>
-                                </label>
-                            </div>
-                    </div>
-                    <div class="flex justify-between items-center mt-5">
-                        <div class="flex flex-col gap-[5px]">
-                            <p class="text-[#33333375] font-bold">${tigerPrawnsText}</p>
-                            <b class="text-[20px] font-bold">450 ₽</b>
-                        </div>
-                         <div class="checkbox-wrapper-33">
-                                <label class="checkbox">
-                                    <input class="checkbox__trigger visuallyhidden" type="checkbox" />
-                                    <span class="checkbox__symbol">
-                                    <svg aria-hidden="true" class="icon-checkbox" width="28px" height="28px" viewBox="0 0 28 28" version="1" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M4 14l8 7L24 7"></path>
-                                    </svg>
-                                    </span>
-                                </label>
-                            </div>
-                    </div>
-                    <div class="flex justify-between items-center mt-5">
-                        <div class="flex flex-col gap-[5px]">
-                            <p class="text-[#33333375] font-bold">${tigerPrawnsText}</p>
-                            <b class="text-[20px] font-bold">450 ₽</b>
-                        </div>
-                         <div class="checkbox-wrapper-33">
-                                <label class="checkbox">
-                                    <input class="checkbox__trigger visuallyhidden" type="checkbox" />
-                                    <span class="checkbox__symbol">
-                                    <svg aria-hidden="true" class="icon-checkbox" width="28px" height="28px" viewBox="0 0 28 28" version="1" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M4 14l8 7L24 7"></path>
-                                    </svg>
-                                    </span>
-                                </label>
-                            </div>
-                    </div>
+                    `).join('')}
                 </div>
             </div>
         </div>
         `;
 
-        if (typeof Swiper !== 'undefined') {
-            setTimeout(() => {
-                const swiperThumb = new Swiper('.mySwiper', {
+        requestAnimationFrame(() => {
+                swiperThumbInstance = new Swiper('.mySwiper', {
                     spaceBetween: 12,        
                     slidesPerView: 3,       
                     freeMode: true,
                     watchSlidesProgress: true,
                 });
 
-                new Swiper('.mySwiper2', {
+                swiperMainInstance = new Swiper('.mySwiper2', {
                     spaceBetween: 10,
                     thumbs: {
-                        swiper: swiperThumb,
+                        swiper: swiperThumbInstance,
                     },
                 });
-            }, 100);
-        }
+        });
     }
 
     menuCon?.addEventListener('click', (e) => {
@@ -300,8 +252,51 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         }).join("");
 
-        renderMenuItems(activeCategory);
+        if (menuCon) {
+            renderMenuItems(activeCategory);
+        }
     }
+
+    
+
+
+    menuBtn.addEventListener('click', () => {
+        body.classList.add('overflow-hidden');
+        menuPage?.classList.remove('hidden');
+        menuPage?.classList.add('flex');
+    });
+
+    closeMenu.addEventListener('click', () => {
+        body.classList.remove('overflow-hidden');
+        menuPage.classList.remove('flex');
+        menuPage.classList.add('hidden');
+    });
+
+    document.querySelectorAll('#reservationBtn, .reservation-btn').forEach(btn => {
+        btn.addEventListener('click', openReservationModal);
+    });
+
+    document.getElementById('reservationBtnMenu').addEventListener('click', () => {
+        menuPage.classList.remove('flex');
+        menuPage.classList.add('hidden');
+        openReservationModal();
+    });
+
+    reservationCloseBtn.addEventListener('click', closeReservationModal);
+
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+            closeReservationModal();
+        }
+    });
+
+    reservationModal.addEventListener('click', (e) => {
+        e.stopPropagation();
+    });
+
+
+
+    // lang 
 
     async function loadTranslations() {
         try {
@@ -320,12 +315,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (currentLangSpan && currentFlagSpan) {
             currentLangSpan.textContent = lang.toUpperCase();
-            currentFlagSpan.className = `fi ${flagMap[lang]} text-base rounded-[2px]`;
+            currentFlagSpan.className = `fi ${flagMap[lang] || ''} text-base rounded-[2px]`;
         }
 
         if (mobileCurrentLang && mobileCurrentFlag) {
             mobileCurrentLang.textContent = lang.toUpperCase();
-            mobileCurrentFlag.className = `fi ${flagMap[lang]} text-base rounded-[2px]`;
+            mobileCurrentFlag.className = `fi ${flagMap[lang] || ''} text-base rounded-[2px]`;
         }
 
         if (translations[lang]) {
@@ -347,46 +342,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const urlParams = new URLSearchParams(window.location.search);
         const productId = urlParams.get('id');
 
-        if (productId && productDetailCon) {
-            renderProductDetail(productId);
-        } else if (menuCon) {
+        if (menuButtons) {
             renderMenuButtons();
         }
-    }
 
-    menuBtn?.addEventListener('click', () => {
-        body.classList.add('overflow-hidden');
-        menuPage?.classList.remove('hidden');
-        menuPage?.classList.add('flex');
-    });
-
-    closeMenu?.addEventListener('click', () => {
-        body.classList.remove('overflow-hidden');
-        menuPage?.classList.remove('flex');
-        menuPage?.classList.add('hidden');
-    });
-
-    document.querySelectorAll('#reservationBtn, .reservation-btn').forEach(btn => {
-        btn.addEventListener('click', openReservationModal);
-    });
-
-    document.getElementById('reservationBtnMenu')?.addEventListener('click', () => {
-        menuPage?.classList.remove('flex');
-        menuPage?.classList.add('hidden');
-        openReservationModal();
-    });
-
-    reservationCloseBtn?.addEventListener('click', closeReservationModal);
-
-    overlay?.addEventListener('click', (e) => {
-        if (e.target === overlay) {
-            closeReservationModal();
+        if (productId && productDetailCon) {
+            renderProductDetail(productId);
         }
-    });
+    }  
 
-    reservationModal?.addEventListener('click', (e) => {
-        e.stopPropagation();
-    });
+     function getTranslatedTitle(item) {
+        if (!item) return '';
+        return translations[currentLang]?.menuData?.[item.id]?.title || item.title;
+    }
 
     langDropdownBtn?.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -408,32 +376,14 @@ document.addEventListener('DOMContentLoaded', () => {
         mobileDropdownArrow?.classList.toggle('rotate-180', isHidden);
     });
 
-    menuButtons?.addEventListener('click', (e) => {
-    const btn = e.target.closest('.menu-btn');
-    if (!btn) return;
+    menuButtons.addEventListener('click', (e) => {
+        const btn = e.target.closest('.menu-btn');
+        if (!btn) return;
 
-    const selectedCategory = btn.getAttribute('data-category');
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const isDetailPage = urlParams.has('id');
-
-    if (isDetailPage || !menuCon) {
-        window.location.href = `menu.html?category=${selectedCategory}`;
-        return;
-    }
-
-    activeCategory = selectedCategory;
-
-    document.querySelectorAll('.menu-btn').forEach(b => {
-        b.classList.remove('border-b-2', 'border-[#B59571]', 'text-[#B59571]');
-        b.classList.add('text-[#333]');
+        const selectedCategory = btn.getAttribute('data-category');
+        
+        window.location.href = `menu.html?${selectedCategory}`;
     });
-
-    btn.classList.remove('text-[#333]');
-    btn.classList.add('border-b-2', 'border-[#B59571]', 'text-[#B59571]');
-
-    renderMenuItems(activeCategory);
-});
 
     document.addEventListener('click', (e) => {
         const option = e.target.closest('.lang-option, .mobile-lang-option');
@@ -458,136 +408,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    async function initApp() {
+        if (window.location.search) {
+            const Para = decodeURIComponent(window.location.search.replace('?', '')).trim();
+            
+            if (Para && !Para.startsWith('id=')) {
+                const categoryName = Para.includes('=') ? Para.split('=')[1] : Para;
+                const Hbtn = MenuBtns.find(b => b.key.toLowerCase() === categoryName.toLowerCase());
+                if (Hbtn) {
+                    activeCategory = Hbtn.key;
+                }
+            }
+        }
 
-async function initApp() {
-    await loadTranslations();
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const productId = urlParams.get('id');
-    const categoryParam = urlParams.get('category');
-
-    if (categoryParam) {
-        activeCategory = categoryParam;
+        await loadTranslations();
     }
 
-    if (menuButtons) {
-        renderMenuButtons();
-    }
-
-    if (menuCon) {
-        renderMenuItems(activeCategory);
-    }
-
-    if (productId && productDetailCon) {
-        renderProductDetail(productId);
-    }
-}
-
-initApp();
+    initApp();
 });
-
-
-const textVal = document.getElementById("textVal");
-const formBtn = document.getElementById("formBtn");
-const phoneInput = document.getElementById("phoneInput");
-const guest = document.getElementById("guest");
-const date = document.getElementById("date");
-const overlay = document.getElementById("overlay");
-const body = document.querySelector("body")
-
-const UZ_DIGITS_LENGTH = 9;
-
-function formatUzDigits(digits) {
-    if (!digits) return "";
-    const clean = digits.replace(/\D/g, "").slice(0, UZ_DIGITS_LENGTH);
-    const parts = [
-        clean.slice(0, 2),
-        clean.slice(2, 5),
-        clean.slice(5, 7),
-        clean.slice(7, 9),
-    ].filter(Boolean);
-    return parts.join(" ");
-}
-
-if (phoneInput) {
-    phoneInput.addEventListener("input", (e) => {
-        e.target.value = formatUzDigits(e.target.value);
-        phoneInput.classList.remove("border-red-400");
-    });
-}
-
-[textVal, guest, date].forEach(input => {
-    if (input) {
-        input.addEventListener("input", () => {
-            input.classList.remove("border-red-400");
-        });
-        if (input.type === "date") {
-            input.addEventListener("change", () => {
-                input.classList.remove("border-red-400");
-            });
-        }
-    }
-});
-
-function showToast(message) {
-    const toast = document.createElement("div");
-    toast.className = "fixed top-[6%] left-1/2 -translate-x-1/2 w-[380px] max-sm:w-[80%] py-2 bg-white text-black px-6 py-3 rounded-lg shadow-lg text-[16px] font-medium transition-all duration-300 z-50";
-    toast.textContent = message;
-
-    document.body.appendChild(toast);
-
-    setTimeout(() => {
-        toast.remove();
-    }, 2000);
-}
-
-if (formBtn) {
-    formBtn.addEventListener("click", (e) => {
-        e.preventDefault();
-
-        [textVal, phoneInput, guest, date].forEach(input => input?.classList.remove("border-red-400"));
-
-        let isValid = true;
-
-        if (textVal && textVal.value === "") {
-            textVal.classList.add("border-red-400");
-            isValid = false;
-        }
-
-        if (phoneInput && phoneInput.value.length < 12) {
-            phoneInput.classList.add("border-red-400");
-            isValid = false;
-        }
-
-        if (guest && guest.value === "") {
-            guest.classList.add("border-red-400");
-            isValid = false;
-        }
-
-        if (date && date.value === "") {
-            date.classList.add("border-red-400");
-            isValid = false;
-        }
-
-        if (isValid) {
-            console.log("Yuborildi", {
-                text: textVal ? textVal.value : "",
-                phone: phoneInput ? phoneInput.value : "",
-                guest: guest ? guest.value : "",
-                date: date ? date.value : ""
-            });
-
-            showToast("Muvaffaqiyatli yuborildi!");
-
-            setTimeout(() => {
-                overlay?.classList.add("hidden");
-                body.classList.add("overflow-y-auto")
-
-                if (textVal) textVal.value = "";
-                if (phoneInput) phoneInput.value = "";
-                if (guest) guest.value = "";
-                if (date) date.value = "";
-            }, 1000);
-        }
-    });
-}
